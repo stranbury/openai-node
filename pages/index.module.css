@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components; 
+@tailwind utilities;
 @font-face {
   font-family: "ColfaxAI";
   src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
@@ -64,4 +67,44 @@
 .main .result {
   font-weight: bold;
   margin-top: 40px;
+}
+/* Glassmorphism theme styles */
+body {
+  background: linear-gradient(45deg, #6ab1d7, #9fceff);
+}
+
+/* Add glassmorphism styles to the chat container */
+.chat-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Add glassmorphism styles to the input field */
+.chat-input {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+}
+
+/* Add glassmorphism styles to the send button */
+.chat-send-button {
+  background: rgba(75, 85, 99, 0.7);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.chat-send-button:hover {
+  background-color: rgba(59, 130, 246, 0.7);
 }
