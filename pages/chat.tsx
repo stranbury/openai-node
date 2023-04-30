@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import messagesOpenai from '../public/conversations.json'; 
@@ -44,7 +45,7 @@ const MessageContainer = styled.ul`
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
-    padding: 0;
+    padding: 1em 2em;
     margin: 0;
     list-style: none;
     height: 100%;
@@ -128,7 +129,7 @@ const GlassButton = styled.button`
 const ChatButton = styled.button`
     border: 1px solid #ccc;
     border-radius: 0.5em;
-    padding: 0.5em 1em;
+    padding: 2em 4em;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -146,8 +147,35 @@ const ChatInputContainer = styled.div`
     grid-gap: 1em;
 
 `
+const ChatHumanInput = styled.li`
+    display: flex; 
+    flex-direction: row;
+    justify-content: flex-start;
+    border-radius: 0.5em;
+    background-color : rgba(0, 0, 0, 0.8);
+    align-self: flex-start;
+  ${props =>
+    props.$human &&
+    css`
+      background: palevioletred;
+      align-self: flex-end;
+    `}
+`
 const Chat = () => {
-  const [messages, setMessages] = useState<any>(messagesOpenai.chats[0].mapping);//should be type Message[]
+  const [messages, setMessages] = useState<Message[]>([
+    {
+  text: "Hello",
+  isReceived: false,
+  isMarkdown: false,
+},{
+  text: " Hi, how are you? ", 
+  isReceived: true,
+  isMarkdown: false,
+},{
+  text: " Hi, how are you? ", 
+  isReceived: true,
+  isMarkdown: false,
+}]);//should be type Message[]
   const [inputMessage, setInputMessage] = useState('');
 console.log( messages)
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,27 +192,49 @@ console.log( messages)
     alert(inputMessage)
   };
 
+   async function onSubmit(event) {
+    event.preventDefault();
+    try {
+      const response = await fetch("/api/generateChat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ animal: inputMessage }),
+      });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw data.error || new Error(`Request failed with status ${response.status}`);
+      }
+
+      if(data.result ){
+        const newMessages = [...messages, { text: inputMessage, isReceived: false, isMarkdown: false }];
+        const newMessages2 = [...newMessages, { text: data.result, isReceived: true, isMarkdown: false }];
+        setMessages(newMessages2);
+      }
+      
+    } catch(error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      alert(error.message);
+    }
+  }
+
   return (
     <ChatContainer>
+      {
+        messages.length >0 &&
         <MessageContainer>
           {
-            
-          Object.values(messages).map((message, index) => (
-            <li
-              key={index}
-              className={`p-2 bg-white rounded shadow-sm ${
-                message.isReceived ? 'text-left' : 'text-right'
-              }`}
-            >
-              {message.isMarkdown ? (
-                <ReactMarkdown className="prose">{message.text}</ReactMarkdown>
-              ) : (
-                `${message}`
-              )}
-            </li>
-          ))
+            messages.map((message, index) => ( 
+            <ChatHumanInput key={index} $human={message.isReceived}>
+              {message.text}
+            </ChatHumanInput>) )
           }
         </MessageContainer>
+      }
+        
       
       <ChatInputContainer>
         <ChatInput
@@ -194,7 +244,7 @@ console.log( messages)
           placeholder="Type your message"
         />
         <GlassButton
-          onClick={handleSendMessage}
+          onClick={onSubmit}
         >
           Send
         </GlassButton>
