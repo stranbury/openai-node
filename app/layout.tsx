@@ -1,4 +1,5 @@
 import '@styles/global.css'
+
 import { NavBar , Footer} from '@components'
 import type { AppProps } from 'next/app'
 import StoreWrapper from '@store/provider'

@@ -1,14 +1,15 @@
 import { NextApiHandler } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+// import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { SupabaseAdapter } from "@next-auth/supabase-adapter"
 // import GitHubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
-import prisma from "@lib/prisma";
+// import prisma from "@lib/prisma";
 
-const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
-export default authHandler;
+// const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
+// export default authHandler;
 
-const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     // GitHubProvider({
     //   clientId: process.env.GITHUB_ID,
@@ -26,6 +27,14 @@ const options: NextAuthOptions = {
       from: process.env.SMTP_FROM,
     }),
   ],
-  adapter: PrismaAdapter(prisma),
+  adapter: SupabaseAdapter({
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    secret: process.env.SUPABASE_SECRET_KEY,
+  }),
+  theme: {
+    colorScheme: "light",
+  }, 
   secret: process.env.SECRET,
 };
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };
