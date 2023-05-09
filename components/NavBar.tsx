@@ -3,7 +3,8 @@ import {FC} from 'react';
 import styled from '@emotion/styled';
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { signIn, signOut, useSession} from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import * as AuthBtn from "./AuthBtn";
 const NavBar: FC = () => {
     const { data: session, status } = useSession();
     console.log(session);
@@ -15,9 +16,8 @@ const NavBar: FC = () => {
         <a className="btn btn-ghost normal-case text-xl">Pantha</a>
     </div>
     <div className="flex-none">
-        <button className="btn btn-square btn-ghost" onClick={()=>signIn()}>
-            signIn
-            </button>
+        <AuthBtn.LoginButton/>
+        <AuthBtn.RegisterButton/>
         {/* <div className="dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle">
             <div className="indicator">

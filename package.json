@@ -18,6 +18,8 @@
     "@reduxjs/toolkit": "1.9.5",
     "@supabase/supabase-js": "2.21.0",
     "@tailwindcss/typography": "0.5.9",
+    "@types/bcrypt": "5.0.0",
+    "bcryptjs": "2.4.3",
     "classnames": "2.3.2",
     "daisyui": "2.51.6",
     "encoding": "0.1.13",

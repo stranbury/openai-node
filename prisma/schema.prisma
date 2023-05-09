@@ -1,17 +1,21 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  binaryTargets = "native"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["next_auth"]
 }
-enum Role {
+enum UserRole {
   USER
   ADMIN
-  @@schema("next_auth")
+}
+enum PromptCategory {
+  EDUCATIONAL
+  ENTERTAINMENT
+  UTILITY
+  OTHER
 }
 
 model accounts {
@@ -32,7 +36,6 @@ model accounts {
   users              users?  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([provider, providerAccountId], map: "provider_unique")
-  @@schema("next_auth")
 }
 
 model sessions {
@@ -42,20 +45,22 @@ model sessions {
   userId       String?  @db.Uuid
   users        users?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@schema("next_auth")
+  
 }
 
 model users {
   id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String?
   email         String?    @unique(map: "email_unique")
+  password      String?
   emailVerified DateTime?  @db.Timestamptz(6)
   image         String?
+  role          UserRole   @default(USER)
   accounts      accounts[]
   sessions      sessions[]
-  prompts       prompt[]
-  chats         chat[]
-  @@schema("next_auth")
+  prompts       prompts[]
+  chats         chats[]
+  
 }
 
 model verification_tokens {
@@ -64,24 +69,24 @@ model verification_tokens {
   expires    DateTime @db.Timestamptz(6)
 
   @@unique([token, identifier], map: "token_identifier_unique")
-  @@schema("next_auth")
+  
 }
 
-model prompt {
+model prompts {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String   @db.VarChar(255)
-  type      String   @db.VarChar(255)
+  type      PromptCategory @default(OTHER)
   description String @db.Text
   content   String   @db.Text
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime? @db.Timestamptz(6)
+  updatedAt DateTime? @db.Timestamptz(6)
   authorId  String?  @db.Uuid
   author    users?   @relation(fields: [authorId], references: [id])
-  chats     chat[]
-  @@schema("next_auth")
+  chats     chats[]
+  
 }
 
-model chat {
+model chats {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String
   temperature Int @default(0)
@@ -91,10 +96,10 @@ model chat {
   memory Json @db.Json
   summary String @db.Text
   archived Boolean @default(false)
-  systemPrompt prompt? @relation(fields: [systemPromptId], references: [id])
+  systemPrompt prompts? @relation(fields: [systemPromptId], references: [id])
   updatedAt DateTime @db.Timestamptz(6)
   createdAt DateTime @db.Timestamptz(6)
-  @@schema("next_auth")
+  
 }
 
 
