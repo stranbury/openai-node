@@ -30,18 +30,14 @@ const translationChat = async (input_language , output_language, text  ) => {
 
 }
 
-export async function POST(req,) {
-    const text = req.body.animal || '';
-    const input_language = req.body.input_language || 'English';
-    const output_language = req.body.output_language || 'French';
+export async function POST(req) {
+
+    // const text = req.body.animal || '';
+    // const input_language = req.body.input_language || 'English';
+    // const output_language = req.body.output_language || 'French';
+    const { text, input_language, output_language } =  req.body;
     if (text.trim().length === 0) {
-        // res.status(400).json({
-        //     error: {
-        //         message: "Please enter some text to translate.",
-        //     }
-        // });
         return new Response("Please enter some text to translate.", { status: 400 });
-    
     }
 
     try {
