@@ -31,7 +31,7 @@ const translationChat = async (input_language , output_language, text  ) => {
 }
 
 export async function POST(req) {
-
+    
     // const text = req.body.animal || '';
     // const input_language = req.body.input_language || 'English';
     // const output_language = req.body.output_language || 'French';
