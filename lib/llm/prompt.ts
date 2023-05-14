@@ -4,7 +4,7 @@ import {
   SystemMessagePromptTemplate,
   MessagesPlaceholder,
 } from "langchain/prompts";
-
+const MemoryPlaceholder = process.env.MEMOERY_KEY || "history";
 export function generatePrompt(systemPrompt : string, human : string, history= false) {
   // create prompt base of schema with system , memory , output and human messages
 

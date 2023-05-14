@@ -103,3 +103,8 @@ model chats {
 }
 
 
+model Document {
+  id      String                 @id @default(cuid())
+  content String
+  vector  Unsupported("vector")?
+}
