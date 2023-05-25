@@ -10,7 +10,7 @@ export function generatePrompt(systemPrompt : string, human : string, history= f
 
   const chatPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate(systemPrompt),
-     ...(history ?  [new MessagesPlaceholder("history")]: []),
+     ...(history ?  [new MessagesPlaceholder(MemoryPlaceholder)]: []),
     HumanMessagePromptTemplate.fromTemplate("{input}"),
   ]);
   console.log("chatPrompt", chatPrompt);
