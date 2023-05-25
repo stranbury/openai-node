@@ -1,15 +1,21 @@
 'use client'
 import { useState , FC} from 'react';
 import styled from '@emotion/styled';
+import { ClassNames } from '@emotion/react';
 type MessageProps = {
   text: string;
+  receive : boolean
 };
 const ChatBox = ({ chatName }) => {
   const [messages, setMessages] = useState([]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    const message = e.target.elements.message.value.trim();
+    const message = {
+      text: e.target.elements.message.value,
+      receive : false
+    };
+
     if (message) {
       // Send message to server here
       setMessages([...messages, message]);
@@ -18,16 +24,16 @@ const ChatBox = ({ chatName }) => {
   }
 
   return (
-    <ChatBoxContainer>
+    <ChatBoxContainer className='chat'>
       <ChatBoxHeader>{chatName}</ChatBoxHeader>
       <MessageList>
         {messages.map((message, index) => (
-          <Message key={index} text={message} />
+          <Message key={index} text={message.text} receive={message.receive} />
         ))}
       </MessageList>
       <MessageForm onSubmit={handleSendMessage}>
-        <input type="text" name="message" placeholder="Type a message..." />
-        <button type="submit">Send</button>
+        <input type="text" name="message" placeholder="Type a message..." className="input input-bordered w-full max-w-xs"/>
+        <button type="submit" className='border-red-500'>Send</button>
       </MessageForm>
     </ChatBoxContainer>
   );
@@ -62,9 +68,9 @@ const MessageList = styled.div`
     display: none;
   }
 `;
-const Message:FC<MessageProps>= ({ text }) => (
-  <MessageStyle>
-    <div className="MessageText">{text}</div>
+const Message:FC<MessageProps>= ({ text , receive}) => (
+  <MessageStyle className="chat-bubble">
+    {text}
   </MessageStyle>
 );
 

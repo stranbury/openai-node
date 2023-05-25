@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = "native"
 }
 
@@ -16,6 +16,12 @@ enum PromptCategory {
   ENTERTAINMENT
   UTILITY
   OTHER
+}
+
+enum taskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
 }
 
 model accounts {
@@ -60,7 +66,8 @@ model users {
   sessions      sessions[]
   prompts       prompts[]
   chats         chats[]
-  
+  kpis          kpi[]
+  tasks         task[]
 }
 
 model verification_tokens {
@@ -84,6 +91,7 @@ model prompts {
   author    users?   @relation(fields: [authorId], references: [id])
   chats     chats[]
   
+  
 }
 
 model chats {
@@ -101,6 +109,45 @@ model chats {
   createdAt DateTime @db.Timestamptz(6)
   
 }
+
+model kpi {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String @db.Uuid
+  name String
+  description String
+  value Int
+  target Int
+  unit String
+  priority Int
+  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @db.Timestamptz(6)
+  user users @relation(fields: [userId], references: [id])
+  archived kpiArchived[]
+}
+model  kpiArchived {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kpiId String @db.Uuid
+  value Int
+  createdAt DateTime @db.Timestamptz(6)
+  kpi kpi @relation(fields:[kpiId],  references: [id])
+}
+
+model task {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String @db.Uuid
+  name String
+  description String
+  dueDate DateTime
+  status taskStatus
+  outcome String
+  chatId String @db.Uuid
+  priority Int
+  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @db.Timestamptz(6)
+  user users @relation(fields: [userId], references: [id])
+}
+
+
 
 
 model Document {

@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <StoreWrapper>
-      <html lang="en" data-theme="cupcake">
+      <html lang="en" data-theme="mytheme">
         <head>
           <meta charSet="utf-8" />
           <meta name="description" content={metadata.description} />
@@ -26,7 +26,7 @@ export default function RootLayout({
         <body>
           <NavBar />
           <main>{children}</main>
-          <Footer />
+          {/* <Footer /> */}
       
         </body>
       </html>

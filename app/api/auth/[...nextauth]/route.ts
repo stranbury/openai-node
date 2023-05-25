@@ -5,7 +5,8 @@ import { SupabaseAdapter } from "@next-auth/supabase-adapter"
 // import GitHubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "@lib/prisma";
+// import prisma from "@lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
 
 // const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
@@ -53,17 +54,17 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
-    EmailProvider({
-      server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      },
-      from: process.env.SMTP_FROM,
-    }),
+    // EmailProvider({
+    //   server: {
+    //     host: process.env.SMTP_HOST,
+    //     port: Number(process.env.SMTP_PORT),
+    //     auth: {
+    //       user: process.env.SMTP_USER,
+    //       pass: process.env.SMTP_PASSWORD,
+    //     },
+    //   },
+    //   from: process.env.SMTP_FROM,
+    // }),
   ],
   adapter: PrismaAdapter(prisma),
   theme: {

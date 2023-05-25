@@ -1,12 +1,37 @@
-import { VectorStoreRetrieverMemory } from "langchain/memory";
+import { VectorStoreRetrieverMemory,BufferMemory, BufferWindowMemory, ConversationSummaryMemory} from "langchain/memory";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
+
 const MemoryPlaceholder = process.env.MEMOERY_KEY || "history";
+
 export function generateMemoryVectorStore(vectorStore, docNumber= 1) {
-    // const vectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
-const memory = new VectorStoreRetrieverMemory({
-  // 1 is how many documents to return, you might want to return more, eg. 4
-  vectorStoreRetriever: vectorStore.asRetriever(docNumber),
-  memoryKey: MemoryPlaceholder,
-});
-return memory;
+  const memory = new VectorStoreRetrieverMemory({
+    vectorStoreRetriever: vectorStore.asRetriever(docNumber),
+    memoryKey: MemoryPlaceholder,
+  });
+  return memory;
 }
+
+export function generateBufferMemory(){
+  const memory = new BufferMemory({
+    memoryKey: MemoryPlaceholder,
+  });
+  return memory;
+}
+
+export function generateBufferWindowMemory(k=1){
+  // k is the number previous occurences of the same input to consider  
+  const memory = new BufferWindowMemory({
+    memoryKey: MemoryPlaceholder,
+    k
+  });
+  return memory;
+}
+
+export function generateConversationSummaryMemory(chatModel: any){
+  const memory = new ConversationSummaryMemory({
+    memoryKey: MemoryPlaceholder,
+    llm: chatModel,
+  });
+  return memory;
+}
+
