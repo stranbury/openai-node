@@ -90,8 +90,18 @@ model prompts {
   authorId  String?  @db.Uuid
   author    users?   @relation(fields: [authorId], references: [id])
   chats     chats[]
-  
-  
+}
+
+model goal_kpi {
+	kpi kpi
+	goal goal
+}
+
+model goals { 
+	name String 
+	description String
+	goal_kpis goal_kpi[]
+	
 }
 
 model chats {
