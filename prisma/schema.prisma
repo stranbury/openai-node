@@ -93,11 +93,16 @@ model prompts {
 }
 
 model goal_kpi {
-	kpi kpi
-	goal goal
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  value Int
+  kpi kpi? @relation(fields: [kpiId], references: [id])
+  goal goals? @relation(fields: [goalId], references: [id])
+  kpiId String @db.Uuid
+  goalId String @db.Uuid
 }
 
 model goals { 
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 	name String 
 	description String
 	goal_kpis goal_kpi[]
@@ -133,6 +138,7 @@ model kpi {
   createdAt DateTime @db.Timestamptz(6)
   user users @relation(fields: [userId], references: [id])
   archived kpiArchived[]
+  goalsUnit goal_kpi[]
 }
 model  kpiArchived {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
